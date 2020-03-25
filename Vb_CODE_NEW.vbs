@@ -1,5 +1,7 @@
 Sub create_report()
-        
+
+    ' loop and calculate each sheet
+
     For Each ws In Worksheets
 
         Dim WorksheetName As String
@@ -19,29 +21,35 @@ Sub create_report()
         
         
 
-        
+        ' create sheet for each Year
+
         WorksheetName = ws.Name
         Year = "Report" & WorksheetName
         Sheets.Add.Name = Year
         
+        ' wirte collumns headers
+
         Cells(1, 1).Value = "Ticker"
         Cells(1, 2).Value = "YearlyChange"
         Cells(1, 3).Value = "PercentChange"
         Cells(1, 4).Value = "Total Stock Volume"
         
-        
+        ' set current sheet as source and report sheet as destination
+
         Set source = ThisWorkbook.Sheets(ws.Name)
         Set destination = ThisWorkbook.Sheets(Year)
         
-       
-    
-        
+        ' keep the last row and last column of the source sheet
         
         LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
         LastColumn = ws.Cells(1, Columns.Count).End(xlToLeft).Column
         
+        ' set the active page
+
         Worksheets(ws.Name).Activate
         
+        ' keep these values as default
+
         TrickerName = Cells(2, 1).Value
         OpenValue = Cells(2, 3)
         CloseValue = Cells(2, 6)
@@ -51,6 +59,8 @@ Sub create_report()
         TotalStock = Cells(2, 7)
         Percent = 0
         
+        'loop on all the rows and calculate percentage
+
         For i = 2 To LastRow
                 
                 If source.Cells(i + 1, 1).Value <> source.Cells(i, 1).Value Then
@@ -90,6 +100,8 @@ Sub create_report()
                 
 
         Next i
+
+        ' set default values for Greatestincrease and GreatestDecrease and Greatestvolume
         
         Greatestincrease = destination.Cells(2, 3).Value
         TickerGreatestincrease = destination.Cells(2, 1).Value
@@ -104,6 +116,8 @@ Sub create_report()
         
         LastRow = destination.Cells(Rows.Count, 1).End(xlUp).Row
         
+        ' calculate Greatestincrease and GreatestDecrease
+
         For i = 2 To LastRow
             
 
